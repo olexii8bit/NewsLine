@@ -1,4 +1,4 @@
-package api
+package com.example.newsline
 
 data class ResponseDTO(val status: String,
                        val totalResults: Int,
@@ -9,6 +9,7 @@ data class ResponseDTO(val status: String,
                            val author: String,
                            val title: String,
                            val description: String,
+                           val url: String,
                            val urlToImage: String,
                            val publishedAt: String,
                            val content: String) { }
