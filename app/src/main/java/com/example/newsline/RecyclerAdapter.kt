@@ -36,35 +36,38 @@ class RecyclerAdapter(private val news: List<ResponseDTO.Companion.Article>, pri
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (news[position].urlToImage.isNullOrEmpty()) {
-            holder.imageView.visibility = GONE
-        } else {
+        if (!news[position].urlToImage.isNullOrEmpty()) {
             Glide.with(context)
                 .load(news[position].urlToImage)
                 .centerCrop()
                 .placeholder(androidx.appcompat.R.drawable.abc_ic_menu_selectall_mtrl_alpha)
                 .into(holder.imageView)
-        }
+
+        } else holder.imageView.visibility = GONE
 
         holder.titleTextView.text = news[position].title
 
         holder.authorTextView.text = news[position].author
 
-        if (news[position].description.isNullOrEmpty()) {
-            holder.descriptionTextView.visibility = GONE
-        } else holder.descriptionTextView.text = news[position].description
+        if (!news[position].description.isNullOrEmpty()) {
+            holder.descriptionTextView.text = news[position].description
+        } else holder.descriptionTextView.visibility = GONE
 
-        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val date: Date = inputDateFormat.parse(news[position].publishedAt)
-        val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        val outputDateString = outputDateFormat.format(date)
-        holder.publishedAtTextView.text = outputDateString
+        if (!news[position].publishedAt.isNullOrEmpty()) {
+            val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            val date: Date = inputDateFormat.parse(news[position].publishedAt)!!
+            val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val outputDateString = outputDateFormat.format(date)
+            holder.publishedAtTextView.text = outputDateString
+        } else holder.publishedAtTextView.visibility = GONE
 
-        holder.toArticleHyperLinkTextView.setOnClickListener{
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(news[position].url)
-            startActivity(context, intent, null)
-        }
+        if (!news[position].url.isNullOrEmpty()) {
+            holder.toArticleHyperLinkTextView.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(news[position].url)
+                startActivity(context, intent, null)
+            }
+        } else holder.toArticleHyperLinkTextView.visibility = GONE
     }
 
     override fun getItemCount() = news.size

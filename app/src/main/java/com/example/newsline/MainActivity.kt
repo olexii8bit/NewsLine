@@ -1,24 +1,29 @@
 package com.example.newsline
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import api.RetrofitInstance
+import com.example.newsline.ResponseDTO.Companion.Article
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity() {
     var pagesLoaded = 0
-    private lateinit var recyclerView: RecyclerView;
-    private val data = mutableListOf<ResponseDTO.Companion.Article>()
+    private lateinit var recyclerView: RecyclerView
+    private val data = mutableListOf<Article>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        data.add(Article(ResponseDTO.Companion.Source("", ""), "", "", "", "https://context.reverso.net/%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4/%D0%B0%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9/headlines", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imgworlds.com%2Flanguage%2Fen%2Fcontact-us%2F&psig=AOvVaw0cdJbEeEatkE0-aYW-Y9tP&ust=1679074868672000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCIDr77r_4P0CFQAAAAAdAAAAABAE", "", ""))
         recyclerView = findViewById(R.id.rv_news)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = RecyclerAdapter(data, this@MainActivity)
@@ -31,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getImages() {
+    private fun getImages() {
         val getHeadlines = RetrofitInstance.service.getHeadlines("us", pageSize = 10, page = ++pagesLoaded)
         getHeadlines?.enqueue(object: Callback<ResponseDTO> {
 
@@ -39,14 +44,14 @@ class MainActivity : AppCompatActivity() {
 
                 if (!response.body()?.articles.isNullOrEmpty() ) {
 
-                    Log.d("request-response", (response.body()?.articles.isNullOrEmpty().toString() ?: "null") + " ${pagesLoaded}")
+                    Log.d("request-response", (response.body()?.articles.isNullOrEmpty().toString()) + " $pagesLoaded")
 
                     for (article in response.body()?.articles!!) {
                         data.add(article)
                         recyclerView.adapter?.notifyItemInserted(data.size - 1)
                     }
 
-                } else { Log.d("request-response", "articles.isNullOrEmpty() = true") }
+                } else { Log.d("request-response", "isSuccessful - ${response.isSuccessful}")}
 
             }
 
@@ -55,5 +60,13 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun getCountryCode(): String {
+        val ableCountryCodes = listOf("ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za")
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val currentCode = telephonyManager.networkCountryIso
+        Log.d("Country code", currentCode)
+        return if (ableCountryCodes.contains(currentCode)) currentCode else "us"
     }
 }
