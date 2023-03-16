@@ -2,30 +2,54 @@ package com.example.newsline
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import api.ResponseDTO
+import api.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
-    private val data = mutableListOf<String>()
-
+    var pagesLoaded = 0
+    private val data = mutableListOf<ResponseDTO.Companion.Article>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (0..5).forEach { i -> data.add("$i element") }
-
-        var recyclerView: RecyclerView = findViewById(R.id.rv_news)
-        recyclerView.adapter = RecyclerAdapter(data)
+        val recyclerView: RecyclerView = findViewById(R.id.rv_news)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = RecyclerAdapter(data, this@MainActivity)
 
         val btn: Button = findViewById(R.id.button)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
         btn.setOnClickListener {
-            data.add("System.currentTimeMillis().toString()")
-            recyclerView.run { adapter?.notifyItemInserted(data.size - 1) }
+            val getAllNews = RetrofitInstance.service.getAllNews(q = "Росія", sortBy = "publishedAt")
+            val getHeadlines = RetrofitInstance.service.getHeadlines("ua", pageSize = 10, page = ++pagesLoaded)
+            getHeadlines?.enqueue(object: Callback<ResponseDTO> {
+
+                override fun onResponse(call: Call<ResponseDTO>, response: Response<ResponseDTO>) {
+
+                    if (!response.body()?.articles.isNullOrEmpty() ) {
+
+                        Log.d("request-response", (response.body()?.articles.isNullOrEmpty().toString() ?: "null") + " ${pagesLoaded}")
+
+                        for (article in response.body()?.articles!!) {
+                            data.add(article)
+                            recyclerView.adapter?.notifyItemInserted(data.size - 1)
+                        }
+
+                    } else { Log.d("request-response", "articles.isNullOrEmpty() = true") }
+
+                }
+
+                override fun onFailure(call: Call<ResponseDTO>, t: Throwable) {
+                    Log.d("request-failure", t.message.toString())
+                }
+
+            })
         }
     }
 }
