@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.util.Log
+import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
@@ -14,6 +15,7 @@ import api.RetrofitInstance
 import com.example.newsline.ResponseDTO.Companion.Article
 import com.example.newsline.api.enums.Category
 import com.example.newsline.api.enums.Country
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,13 +25,13 @@ const val PAGE_SIZE = 10
 
 class MainActivity : AppCompatActivity() {
     var pagesLoaded = 0
+    var noMoreResults = false
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var keywordsEditText: EditText
+    private lateinit var keywordsEditText: TextInputEditText
     private lateinit var countrySpinner: Spinner
     private lateinit var categorySpinner: Spinner
 
-    private lateinit var filterLinearLayout: LinearLayout
     private lateinit var filterRelativeLayout: RelativeLayout
     private lateinit var filterImageButton: ImageButton
     private lateinit var findButton: ImageButton
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         categorySpinner = findViewById(R.id.categorySpinner)
         categorySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.values())
 
-        filterLinearLayout = findViewById(R.id.filterLinearLayout)
+        //filterLinearLayout = findViewById(R.id.filterLinearLayout)
 
         filterRelativeLayout = findViewById(R.id.filterRelativeLayout)
         filterRelativeLayout.visibility = GONE
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         filterImageButton.setOnClickListener {
             if (filterRelativeLayout.visibility == GONE) {
                 filterRelativeLayout.visibility = VISIBLE
+                filterRelativeLayout.gravity = Gravity.TOP
             } else {
                 filterRelativeLayout.visibility = GONE
                 countrySpinner.setSelection(countrySpinnerAdapter.getPosition(getCurrentCountryCode()))
@@ -86,6 +89,10 @@ class MainActivity : AppCompatActivity() {
         findButton = findViewById(R.id.findImageButton)
         findButton.setOnClickListener {
             findMoreButton.visibility = VISIBLE
+            noMoreResults = false
+            recyclerView.run { adapter!!.notifyItemRangeRemoved(0, data.size) }
+            data.clear()
+            pagesLoaded = 0
             getNews()
         }
 
@@ -93,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         findMoreButton.setOnClickListener {
             getNews()
         }
-        getNews()
+        //getNews()
     }
 
     private fun getNews() {
@@ -104,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         if (filterRelativeLayout.visibility == VISIBLE) {
             keyWords = keywordsEditText.text.toString()
             countryCode = countrySpinner.selectedItem.toString().lowercase(Locale.getDefault())
+            Log.d("Country code", countryCode)
             category = categorySpinner.selectedItem.toString().lowercase(Locale.getDefault())
         }
 
@@ -117,7 +125,12 @@ class MainActivity : AppCompatActivity() {
         currentQuery?.enqueue(object : Callback<ResponseDTO> {
             override fun onResponse(call: Call<ResponseDTO>, response: Response<ResponseDTO>) {
                 if (!response.body()?.articles.isNullOrEmpty()) {
-                    if (response.body()?.totalResults!! <= 0) TODO("change LadeMoreButton visibility when totalResults == 0")
+                    Log.d("pageSize", response.body()?.totalResults!!.toString())
+                    if ((PAGE_SIZE * pagesLoaded) >= response.body()?.totalResults!!) noMoreResults = true
+                    if (noMoreResults) {
+                        Toast.makeText(this@MainActivity, "No more results", Toast.LENGTH_SHORT).show();
+                        findMoreButton.visibility = GONE
+                    }
                     Log.d("request-response", (response.body()?.articles.isNullOrEmpty().toString()) + " $pagesLoaded")
                     for (article in response.body()?.articles!!) {
                         data.add(article)
