@@ -1,4 +1,4 @@
-package com.example.newsline
+package com.example.newsline.domain
 
 import android.content.Context
 import android.content.Intent
@@ -12,11 +12,13 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.newsline.R
+import com.example.newsline.domain.models.Article
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RecyclerAdapter(private val news: List<ResponseDTO.Companion.Article>, private val context: Context) :
+class RecyclerAdapter(private val news: List<Article>, private val context: Context) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

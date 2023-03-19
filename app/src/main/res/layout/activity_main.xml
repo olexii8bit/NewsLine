@@ -1,96 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/smallMargin"
-        android:orientation="vertical"
-        android:gravity="top">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".presentation.MainActivity">
 
-        <RelativeLayout
-            android:id="@+id/filterRelativeLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/smallMargin"
-            android:layout_marginEnd="@dimen/smallMargin"
-            android:background="@color/white"
-            android:elevation="10dp">
+            android:layout_margin="@dimen/smallMargin"
+            android:orientation="vertical"
+            android:gravity="top">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/keywordsTextInputLayout"
+            <RelativeLayout
+                android:id="@+id/filterRelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:hint="Keywords">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/keywordsEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/countryTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/keywordsTextInputLayout"
                 android:layout_marginStart="@dimen/smallMargin"
-                android:layout_marginTop="@dimen/smallMargin"
-                android:text="Country:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <Spinner
-                android:id="@+id/countrySpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/countryTextView"
-                android:layout_marginStart="@dimen/smallMargin"
-                android:layout_marginTop="@dimen/smallMargin"
-                android:layout_toEndOf="@id/countryTextView"
-                android:dropDownWidth="wrap_content" />
-
-            <TextView
-                android:id="@+id/categoryTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/countryTextView"
-                android:layout_marginStart="@dimen/smallMargin"
-                android:layout_marginTop="@dimen/smallMargin"
-                android:layout_marginBottom="@dimen/smallMargin"
-                android:text="Category:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <Spinner
-                android:id="@+id/categorySpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/countrySpinner"
-                android:layout_alignBottom="@+id/categoryTextView"
-                android:layout_marginStart="@dimen/smallMargin"
-                android:layout_marginTop="@dimen/smallMargin"
-                android:layout_toEndOf="@id/categoryTextView" />
-
-            <ImageButton
-                android:id="@+id/findImageButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/categoryTextView"
-                android:layout_alignParentBottom="false"
+                android:layout_marginEnd="@dimen/smallMargin"
                 android:background="@color/white"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_find" />
+                android:elevation="10dp">
 
-        </RelativeLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/keywordsTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:hint="Keywords">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/keywordsEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/countryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/keywordsTextInputLayout"
+                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_marginTop="@dimen/smallMargin"
+                    android:text="Country:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <Spinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/countryTextView"
+                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_marginTop="@dimen/smallMargin"
+                    android:layout_toEndOf="@id/countryTextView"
+                    android:dropDownWidth="wrap_content" />
+
+                <TextView
+                    android:id="@+id/categoryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/countryTextView"
+                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_marginTop="@dimen/smallMargin"
+                    android:layout_marginBottom="@dimen/smallMargin"
+                    android:text="Category:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/countrySpinner"
+                    android:layout_alignBottom="@+id/categoryTextView"
+                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_marginTop="@dimen/smallMargin"
+                    android:layout_toEndOf="@id/categoryTextView" />
+
+                <ImageButton
+                    android:id="@+id/findImageButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@+id/categoryTextView"
+                    android:layout_alignParentBottom="false"
+                    android:background="@color/white"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_find" />
+
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/filterImageButton"
@@ -105,25 +110,26 @@
                 android:elevation="10dp"
                 android:contentDescription="Filter" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_news"
-            tools:listitem="@layout/news_list_element"
-            app:layout_constraintTop_toBottomOf="@+id/filterImageButton"
-            android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:nestedScrollingEnabled="false"
-            android:scrollbars="vertical"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                tools:listitem="@layout/news_list_element"
+                app:layout_constraintTop_toBottomOf="@+id/filterImageButton"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="vertical" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Load more"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"/>
+            <Button
+                android:id="@+id/findMoreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Load more"
+                android:textColor="@color/black"
+                android:layout_gravity="center_horizontal" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>

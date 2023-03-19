@@ -9,6 +9,5 @@ object RetrofitInstance {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    const val apiKey = "5ff64f827b2f40778e1cdf7e6879f6dc"
     var service: ApiService = retrofit.create(ApiService::class.java)
 }
