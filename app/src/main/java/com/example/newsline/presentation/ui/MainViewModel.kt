@@ -1,4 +1,4 @@
-package com.example.newsline.presentation
+package com.example.newsline.presentation.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

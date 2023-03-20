@@ -1,4 +1,4 @@
-package com.example.newsline.domain
+package com.example.newsline.presentation.ui
 
 import android.content.Context
 import android.content.Intent

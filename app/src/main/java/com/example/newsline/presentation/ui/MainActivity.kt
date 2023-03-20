@@ -1,4 +1,4 @@
-package com.example.newsline.presentation
+package com.example.newsline.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsline.R
-import com.example.newsline.domain.RecyclerAdapter
-import com.example.newsline.api.enums.Category
-import com.example.newsline.api.enums.Country
+import com.example.newsline.data.newsApi.enums.Category
+import com.example.newsline.data.newsApi.enums.Country
 import com.example.newsline.data.repository.RemoteArticleRepositoryImpl
 import com.example.newsline.databinding.ActivityMainBinding
 import com.example.newsline.domain.Location
@@ -63,10 +62,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.findImageButton.setOnClickListener {
-            //binding.findMoreButton.visibility = VISIBLE
-            binding.recyclerView.adapter?.notifyItemRangeRemoved(0, listData.size)
-            listData.clear()
-            PagesLoaded.value = 0
+            binding.findMoreButton.visibility = VISIBLE
+            if (listData.isNotEmpty()) {
+                binding.recyclerView.adapter?.notifyItemRangeRemoved(0, listData.size)
+                listData.clear()
+            }
+
             getFilteredHeadlinesUseCase = getFilteredHeadlinesUseCase.updateFilters(
                 binding.keywordsEditText.text.toString(),
                 binding.countrySpinner.selectedItem.toString().lowercase(Locale.getDefault()),
@@ -74,31 +75,44 @@ class MainActivity : AppCompatActivity() {
             )
 
             MainScope().launch {
-                listData.addAll(getFilteredHeadlinesUseCase.execute())
-                binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
-            }
-            // make findMoreButton showing filtered articles
-            binding.findMoreButton.setOnClickListener {
-                if (!PagesLoaded.resultsEnded) {
-                    MainScope().launch {
+                getHeadlinesUseCase.execute().let {
+                    if (it.isNotEmpty()) {
                         listData.addAll(getFilteredHeadlinesUseCase.execute())
                         binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
                     }
                 }
             }
-        }
-        binding.findMoreButton.setOnClickListener {
-            if (!PagesLoaded.resultsEnded) {
+            // make findMoreButton showing filtered articles
+            binding.findMoreButton.setOnClickListener { button ->
                 MainScope().launch {
-                    listData.addAll(getHeadlinesUseCase.execute())
-                    binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
+                    getHeadlinesUseCase.execute().let {
+                        if (it.isNotEmpty()) {
+                            listData.addAll(getFilteredHeadlinesUseCase.execute())
+                            binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
+                        } else button.visibility = GONE
+                    }
+                }
+            }
+        }
+
+        binding.findMoreButton.setOnClickListener { button ->
+            MainScope().launch {
+                getHeadlinesUseCase.execute().let {
+                    if (it.isNotEmpty()) {
+                        listData.addAll(getHeadlinesUseCase.execute())
+                        binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
+                    } else button.visibility = GONE
                 }
             }
         }
 
         MainScope().launch {
-            listData.addAll(getHeadlinesUseCase.execute())
-            binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
+            getHeadlinesUseCase.execute().let {
+                if (it.isNotEmpty()) {
+                    listData.addAll(getHeadlinesUseCase.execute())
+                    binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
+                } else binding.findMoreButton.visibility = GONE
+            }
         }
 
         Log.d("DATA1", listData.size.toString())

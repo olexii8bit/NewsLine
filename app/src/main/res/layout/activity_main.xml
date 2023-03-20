@@ -6,12 +6,11 @@
     <data>
 
     </data>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        tools:context=".presentation.MainActivity">
+        tools:context=".presentation.ui.MainActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
