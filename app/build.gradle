@@ -2,11 +2,14 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
-
 android {
     namespace 'com.example.newsline'
     compileSdk 33
-
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
     defaultConfig {
         applicationId "com.example.newsline"
         minSdk 24
@@ -37,16 +40,28 @@ android {
 
 dependencies {
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testImplementation 'org.testng:testng:6.9.6'
+    androidTestImplementation 'junit:junit:4.12'
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.2.1'
+
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
 
     implementation 'androidx.core:core:1.9.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    /*implementation 'androidx.test:monitor:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'*/
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -56,7 +71,4 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-
-
-
 }

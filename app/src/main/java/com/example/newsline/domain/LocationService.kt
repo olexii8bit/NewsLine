@@ -1,19 +1,18 @@
 package com.example.newsline.domain
 
-import android.content.Context
 import android.content.Context.TELEPHONY_SERVICE
 import android.telephony.TelephonyManager
 import android.util.Log
 import com.example.newsline.domain.Application.Companion.appContext
 import com.example.newsline.data.newsApi.enums.Country
 
-interface Location {
+interface LocationService {
 
     fun getCurrentLocationCountry(): String
 
     fun getCurrentCountryCode(): Country
 
-    class Base(): Location {
+    class Base(): LocationService {
         override fun getCurrentLocationCountry(): String {
             val telephonyManager = appContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
             val currentCode = telephonyManager.networkCountryIso

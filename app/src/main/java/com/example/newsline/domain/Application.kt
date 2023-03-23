@@ -7,12 +7,11 @@ import android.content.Context
 class Application : Application() {
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
+        appContext = applicationContext
     }
 
     companion object {
-        private lateinit var context: android.content.Context
-        val appContext: Context
-            get() = context
+        lateinit var appContext: Context
+            private set
     }
 }

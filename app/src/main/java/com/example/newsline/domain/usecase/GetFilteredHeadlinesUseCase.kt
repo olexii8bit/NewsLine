@@ -1,7 +1,5 @@
 package com.example.newsline.domain.usecase
 
-import com.example.newsline.domain.Location
-import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.repository.RemoteArticleRepository
 
 class GetFilteredHeadlinesUseCase(
@@ -10,7 +8,7 @@ class GetFilteredHeadlinesUseCase(
     private val countryCode: String = "",
     private val category: String = "",
 ) {
-    private var pageNumber = 0
+    /*private var pageNumber = 0
     fun updateFilters(
         keyWords: String,
         countryCode: String,
@@ -31,6 +29,6 @@ class GetFilteredHeadlinesUseCase(
             if (countryCode == "") countryCode else this.countryCode,
             category
         )
-    }
+    }*/
 
 }

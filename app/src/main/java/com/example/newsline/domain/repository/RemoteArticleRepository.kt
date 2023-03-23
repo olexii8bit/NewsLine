@@ -6,9 +6,9 @@ interface RemoteArticleRepository {
 
     suspend fun getArticles(pageNumber: Int): List<Article>
 
-    suspend fun getArticlesFiltered(pageNumber: Int,
+    /*suspend fun getArticlesFiltered(pageNumber: Int,
                                     keyWords: String,
                                     countryCode: String,
-                                    category: String): List<Article>
+                                    category: String): List<Article>*/
 
 }
