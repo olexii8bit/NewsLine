@@ -1,8 +1,8 @@
 package com.example.newsline.domain.usecase
 
+import com.example.newsline.domain.exceptionHandler.HandleError
 import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.repository.RemoteArticleRepository
-import com.example.newsline.exceptionHandler.HandleError
 
 class GetHeadlinesUseCase(
     private val remoteArticleRepository: RemoteArticleRepository,

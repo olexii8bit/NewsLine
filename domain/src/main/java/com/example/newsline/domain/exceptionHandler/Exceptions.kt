@@ -1,4 +1,4 @@
-package com.example.newsline.exceptionHandler
+package com.example.newsline.domain.exceptionHandler
 
 
 class NoInternetConnectionException: Exception() {}

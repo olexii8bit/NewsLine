@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RecyclerAdapter(private val news: List<Article>, private val context: Context) :
+class RecyclerAdapter(private val news: List<com.example.newsline.domain.models.Article>, private val context: Context) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

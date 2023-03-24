@@ -2,20 +2,19 @@ package com.example.newsline.data.repository
 
 import com.example.newsline.data.newsApi.RetrofitInstance
 import com.example.newsline.data.newsApi.ApiService
-import com.example.newsline.exceptionHandler.HandleError
-import com.example.newsline.domain.LocationService
+import com.example.newsline.domain.exceptionHandler.HandleError
 import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.repository.RemoteArticleRepository
 
 class RemoteArticleRepositoryImpl(
     private val handleError: HandleError = HandleError.DataError(),
     private val apiService: ApiService = RetrofitInstance.service,
-    private val locationService: LocationService = LocationService.Base()) : RemoteArticleRepository {
+    private val locationCode: String = "us") : RemoteArticleRepository {
 
     override suspend fun getArticles(pageNumber: Int): List<Article> {
         return try {
             apiService.getHeadlines(
-                country = locationService.getCurrentLocationCountry(),
+                country = locationCode,
                 page = pageNumber
             ).articles.toList()
         } catch (e: Exception) {

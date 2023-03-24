@@ -1,8 +1,7 @@
-package com.example.newsline.domain
+package com.example.newsline.presentation
 
 import android.app.Application
 import android.content.Context
-
 
 class Application : Application() {
     override fun onCreate() {
