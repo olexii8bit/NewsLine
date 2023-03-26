@@ -4,7 +4,8 @@ import com.example.newsline.domain.models.Article
 
 interface RemoteArticleRepository {
 
-    suspend fun getArticles(pageNumber: Int): List<Article>
+    suspend fun getArticles(pageNumber: Int,
+                            countryCode: String = "us"): List<Article>
 
     /*suspend fun getArticlesFiltered(pageNumber: Int,
                                     keyWords: String,

@@ -8,13 +8,13 @@ import com.example.newsline.domain.repository.RemoteArticleRepository
 
 class RemoteArticleRepositoryImpl(
     private val handleError: HandleError = HandleError.DataError(),
-    private val apiService: ApiService = RetrofitInstance.service,
-    private val locationCode: String = "us") : RemoteArticleRepository {
+    private val apiService: ApiService = RetrofitInstance.service) : RemoteArticleRepository {
 
-    override suspend fun getArticles(pageNumber: Int): List<Article> {
+    override suspend fun getArticles(pageNumber: Int,
+                                     countryCode: String): List<Article> {
         return try {
             apiService.getHeadlines(
-                country = locationCode,
+                country = countryCode,
                 page = pageNumber
             ).articles.toList()
         } catch (e: Exception) {
@@ -22,6 +22,8 @@ class RemoteArticleRepositoryImpl(
             return emptyList()
         }
     }
+
+
 
     /*override suspend fun getArticlesFiltered(pageNumber: Int,
                                              keyWords: String,

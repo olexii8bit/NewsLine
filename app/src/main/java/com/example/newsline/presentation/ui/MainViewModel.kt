@@ -1,12 +1,27 @@
 package com.example.newsline.presentation.ui
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.newsline.data.newsApi.RetrofitInstance
+import com.example.newsline.data.repository.RemoteArticleRepositoryImpl
+import com.example.newsline.domain.exceptionHandler.HandleError
+import com.example.newsline.domain.models.Article
+import com.example.newsline.domain.models.Source
+import com.example.newsline.domain.repository.RemoteArticleRepository
+import com.example.newsline.domain.usecase.GetHeadlinesUseCase
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
-class MainViewModel: ViewModel() {
+class MainViewModel(
+    private val getHeadlinesUseCase: GetHeadlinesUseCase,
+) : ViewModel() {
+
+    val headlinesLive = MutableLiveData(mutableListOf<Article>())
 
     init {
-        Log.d("AAA", "VM created")
+        MainScope().launch { loadMoreHeadlines() }
     }
 
     override fun onCleared() {
@@ -14,5 +29,12 @@ class MainViewModel: ViewModel() {
         Log.d("AAA", "VM cleared")
     }
 
-
+    suspend fun loadMoreHeadlines() {
+        getHeadlinesUseCase.execute().let { newHeadlines ->
+            headlinesLive.value!!.addAll(newHeadlines)
+            headlinesLive.value = headlinesLive.value
+            Log.d("AAA", "load LiveData size : " + headlinesLive.value!!.size + "\n" +
+                    "has active observer : " + headlinesLive.hasActiveObservers())
+        }
+    }
 }

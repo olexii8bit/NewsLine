@@ -1,43 +1,32 @@
 package com.example.newsline.presentation.ui
 
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsline.LocationService
 import com.example.newsline.R
-import com.example.newsline.data.repository.RemoteArticleRepositoryImpl
 import com.example.newsline.databinding.ActivityMainBinding
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.usecase.GetHeadlinesUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
-    private val articleList = mutableListOf<Article>()
-
     private lateinit var mainViewModel: MainViewModel
-
-    private val remoteArticleRepository = RemoteArticleRepositoryImpl()
-    private val getHeadlinesUseCase = GetHeadlinesUseCase(remoteArticleRepository)
-    //private val getFilteredHeadlinesUseCase = GetFilteredHeadlinesUseCase(remoteArticleRepository)
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding : ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        val articlesList = mutableListOf<Article>()
 
+        mainViewModel = ViewModelProvider(this@MainActivity, MainViewModelFactory())[MainViewModel::class.java]
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = RecyclerAdapter(articleList, this@MainActivity)
-
+        binding.recyclerView.adapter = RecyclerAdapter(this@MainActivity, articlesList)
         /*binding.countrySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
         val countrySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
         binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(Location.Base().getCurrentCountryCode()))
@@ -54,6 +43,12 @@ class MainActivity : AppCompatActivity() {
                 binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(Location.Base().getCurrentCountryCode()))
             }
         }*/
+
+        /*getHeadlinesUseCase.newCountry(
+            LocationService
+                .Base((application as App).appContext)
+                .getCurrentLocationCountry()
+        ).let { newUseCase -> getHeadlinesUseCase = newUseCase }*/
 
         /*binding.findImageButton.setOnClickListener {
             binding.findMoreButton.visibility = VISIBLE
@@ -89,31 +84,24 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
+        mainViewModel.headlinesLive.observe(this) { newArticlesList ->
+            Log.d("AAA", "observed : " + newArticlesList.size)
+            val oldArticlesListSize = articlesList.size
+            articlesList.clear()
+            articlesList.addAll(newArticlesList)
+            binding.recyclerView.adapter!!.notifyDataSetChanged()
+            /*binding.recyclerView.adapter!!.notifyItemRangeInserted(
+                oldArticlesListSize - 1,
+                oldArticlesListSize - newArticlesList.size - 2
+            )*/
+        }
+
         binding.findMoreButton.setOnClickListener { button ->
             MainScope().launch {
                 button.isEnabled = false
-                getHeadlinesUseCase.execute().let {
-                    if (it.isNotEmpty()) {
-                        articleList.addAll(it)
-                        binding.recyclerView.adapter?.notifyItemInserted(articleList.size - 1)
-                    }
-                }
+                mainViewModel.loadMoreHeadlines()
                 button.isEnabled = true
             }
         }
-
-        binding.findMoreButton.visibility = GONE
-        MainScope().launch {
-            getHeadlinesUseCase.execute().let {
-                if (it.isNotEmpty()) {
-                    articleList.addAll(it)
-                    binding.recyclerView.adapter?.notifyItemInserted(articleList.size - 1)
-                }
-            }
-            binding.findMoreButton.visibility = VISIBLE
-        }
-
-        Log.d("DATA1", articleList.size.toString())
     }
-
 }
