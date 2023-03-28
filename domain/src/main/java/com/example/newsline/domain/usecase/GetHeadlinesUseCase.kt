@@ -19,7 +19,7 @@ class GetHeadlinesUseCase(
     )
 
     suspend fun execute(): List<Article> {
-        return try { remoteArticleRepository.getArticles(++pageNumber, countryCode) }
+        return try { remoteArticleRepository.get(++pageNumber, countryCode) }
         catch (e: Exception) {
             --pageNumber
             handleError.handle(e)

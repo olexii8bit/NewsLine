@@ -1,15 +1,9 @@
 package com.example.newsline.presentation.ui
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.newsline.data.newsApi.RetrofitInstance
-import com.example.newsline.data.repository.RemoteArticleRepositoryImpl
-import com.example.newsline.domain.exceptionHandler.HandleError
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.models.Source
-import com.example.newsline.domain.repository.RemoteArticleRepository
 import com.example.newsline.domain.usecase.GetHeadlinesUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

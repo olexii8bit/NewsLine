@@ -90,10 +90,6 @@ class MainActivity : AppCompatActivity() {
             articlesList.clear()
             articlesList.addAll(newArticlesList)
             binding.recyclerView.adapter!!.notifyDataSetChanged()
-            /*binding.recyclerView.adapter!!.notifyItemRangeInserted(
-                oldArticlesListSize - 1,
-                oldArticlesListSize - newArticlesList.size - 2
-            )*/
         }
 
         binding.findMoreButton.setOnClickListener { button ->

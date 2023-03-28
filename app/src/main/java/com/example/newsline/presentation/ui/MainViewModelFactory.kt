@@ -2,17 +2,15 @@ package com.example.newsline.presentation.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.newsline.data.newsApi.ApiService
 import com.example.newsline.data.newsApi.RetrofitInstance
-import com.example.newsline.data.repository.RemoteArticleRepositoryImpl
+import com.example.newsline.data.repository.ArticleRepositoryImpl
 import com.example.newsline.domain.exceptionHandler.HandleError
-import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.usecase.GetHeadlinesUseCase
 
 class MainViewModelFactory(): ViewModelProvider.Factory {
 
     private val remoteArticleRepository =
-        RemoteArticleRepositoryImpl(
+        ArticleRepositoryImpl(
             handleError = HandleError.DataError(),
             apiService = RetrofitInstance.service
         )
