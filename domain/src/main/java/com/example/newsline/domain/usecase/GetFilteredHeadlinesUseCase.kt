@@ -1,9 +1,9 @@
 package com.example.newsline.domain.usecase
 
-import com.example.newsline.domain.repository.RemoteArticleRepository
+import com.example.newsline.domain.repository.ArticleRepository
 
 class GetFilteredHeadlinesUseCase(
-    private val remoteArticleRepository: RemoteArticleRepository,
+    private val remoteArticleRepository: ArticleRepository,
     private val keyWords: String = "",
     private val countryCode: String = "",
     private val category: String = "",

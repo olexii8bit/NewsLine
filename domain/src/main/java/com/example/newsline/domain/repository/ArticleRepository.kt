@@ -2,7 +2,7 @@ package com.example.newsline.domain.repository
 
 import com.example.newsline.domain.models.Article
 
-interface RemoteArticleRepository {
+interface ArticleRepository {
 
     suspend fun get(pageNumber: Int,
                     countryCode: String = "us"): List<Article>

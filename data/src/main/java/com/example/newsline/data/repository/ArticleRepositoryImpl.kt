@@ -4,11 +4,11 @@ import com.example.newsline.data.newsApi.RetrofitInstance
 import com.example.newsline.data.newsApi.ApiService
 import com.example.newsline.domain.exceptionHandler.HandleError
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.repository.RemoteArticleRepository
+import com.example.newsline.domain.repository.ArticleRepository
 
 class ArticleRepositoryImpl(
     private val handleError: HandleError = HandleError.DataError(),
-    private val apiService: ApiService = RetrofitInstance.service) : RemoteArticleRepository {
+    private val apiService: ApiService = RetrofitInstance.service) : ArticleRepository {
 
     override suspend fun get(pageNumber: Int,
                              countryCode: String): List<Article> {
