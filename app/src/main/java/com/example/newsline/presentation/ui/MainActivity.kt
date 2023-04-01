@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsline.R
 import com.example.newsline.databinding.ActivityMainBinding
 import com.example.newsline.domain.models.Article
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-
+import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         val articlesList = mutableListOf<Article>()
 
-        mainViewModel = ViewModelProvider(this@MainActivity, MainViewModelFactory())[MainViewModel::class.java]
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = RecyclerAdapter(this@MainActivity, articlesList)
         /*binding.countrySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
@@ -86,7 +84,6 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.headlinesLive.observe(this) { newArticlesList ->
             Log.d("AAA", "observed : " + newArticlesList.size)
-            val oldArticlesListSize = articlesList.size
             articlesList.clear()
             articlesList.addAll(newArticlesList)
             binding.recyclerView.adapter!!.notifyDataSetChanged()
