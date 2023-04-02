@@ -4,10 +4,12 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.newsline.domain.usecase.GetHeadlinesUseCase
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.models.Article
 import com.example.newsline.presentation.App
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -18,10 +20,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val handleError: HandleError =
         (app as App).instanceProvider.providePresentationErrorHandler()
 
-    val headlinesLive = MutableLiveData(mutableListOf<Article>())
+    val headlinesLiveData = MutableLiveData(mutableListOf<Article>())
 
     init {
-        MainScope().launch { loadMoreHeadlines() }
+        loadMoreHeadlines()
     }
 
     override fun onCleared() {
@@ -29,16 +31,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         Log.d("AAA", "VM cleared")
     }
 
-    suspend fun loadMoreHeadlines() {
-        try {
-            getHeadlinesUseCase.execute().let { newHeadlines ->
-                headlinesLive.value!!.addAll(newHeadlines)
-                headlinesLive.value = headlinesLive.value
-                Log.d("AAA", "load LiveData size : " + headlinesLive.value!!.size + "\n" +
-                        "has active observer : " + headlinesLive.hasActiveObservers())
+    fun loadData() = headlinesLiveData.postValue(getHeadlinesUseCase.getData() as MutableList<Article>)
+
+    fun loadMoreHeadlines() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                getHeadlinesUseCase.tryToFetchData()
+            } catch (e: Exception) {
+                viewModelScope.launch(Dispatchers.Main) { handleError.handle(e) }
+                return@launch
             }
-        } catch (e: Exception) {
-            handleError.handle(e)
+            Log.d("AAA", "no Exception")
+            loadData()
         }
     }
 }

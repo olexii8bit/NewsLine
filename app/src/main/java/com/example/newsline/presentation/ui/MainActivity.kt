@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
-        mainViewModel.headlinesLive.observe(this) { newArticlesList ->
+        mainViewModel.headlinesLiveData.observe(this) { newArticlesList ->
             Log.d("AAA", "observed : " + newArticlesList.size)
             articlesList.clear()
             articlesList.addAll(newArticlesList)
@@ -90,11 +90,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.findMoreButton.setOnClickListener { button ->
-            MainScope().launch {
-                button.isEnabled = false
-                mainViewModel.loadMoreHeadlines()
-                button.isEnabled = true
-            }
+            button.isEnabled = false
+            mainViewModel.loadMoreHeadlines()
+            button.isEnabled = true
         }
     }
 }

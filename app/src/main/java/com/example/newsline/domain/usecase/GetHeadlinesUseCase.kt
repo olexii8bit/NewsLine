@@ -10,17 +10,18 @@ class GetHeadlinesUseCase(
     private val handleError: HandleError = HandleError.DomainError(),
     private val locationService: LocationService
 ) {
+    private val data = mutableListOf<Article>()
+
     private var pageNumber = 0
     private val countryCode: String = locationService.getCurrentLocationCountry()
 
-    fun reset() { pageNumber = 0 }
+    fun getData(): List<Article> = data
 
-    suspend fun execute(): List<Article> {
-        return try { articleRepository.get(++pageNumber, countryCode) }
+    suspend fun tryToFetchData() {
+        try { data.addAll(articleRepository.get(++pageNumber, countryCode)) }
         catch (e: Exception) {
             --pageNumber
             handleError.handle(e)
-            return emptyList()
         }
     }
 }
