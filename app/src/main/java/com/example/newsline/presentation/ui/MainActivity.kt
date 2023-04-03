@@ -1,7 +1,12 @@
 package com.example.newsline.presentation.ui
 
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +16,11 @@ import com.example.newsline.domain.models.Article
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import androidx.activity.viewModels
+import com.example.newsline.data.newsApi.enums.Category
+import com.example.newsline.data.newsApi.enums.Country
+import com.example.newsline.domain.LocationService
+import com.example.newsline.presentation.App
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,16 +31,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        val locationService: LocationService =
+            (applicationContext as App).instanceProvider.provideLocationService()
+
         val headlinesAdapter = RecyclerAdapter(this@MainActivity)
         with(binding.recyclerView) {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = headlinesAdapter
         }
-        /*binding.countrySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
-        val countrySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
-        binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(Location.Base().getCurrentCountryCode()))
 
-        binding.categorySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.values())
+        val countrySpinnerAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
+        binding.countrySpinner.adapter = countrySpinnerAdapter
+        binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(locationService.getCurrentLocationCountryCode()))
+
+        binding.categorySpinner.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.values())
 
         binding.filterRelativeLayout.visibility = GONE
         binding.filterImageButton.setOnClickListener {
@@ -39,49 +55,30 @@ class MainActivity : AppCompatActivity() {
                 binding.filterRelativeLayout.gravity = Gravity.TOP
             } else {
                 binding.filterRelativeLayout.visibility = GONE
-                binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(Location.Base().getCurrentCountryCode()))
+                binding.countrySpinner.setSelection(
+                    countrySpinnerAdapter.getPosition(
+                        locationService.getCurrentLocationCountryCode()
+                    )
+                )
             }
-        }*/
+        }
 
-        /*getHeadlinesUseCase.newCountry(
-            LocationService
-                .Base((application as App).appContext)
-                .getCurrentLocationCountry()
-        ).let { newUseCase -> getHeadlinesUseCase = newUseCase }*/
+        binding.filterOffImageButton.setOnClickListener {
+            mainViewModel.setFilteredFinding(false)
+            headlinesAdapter.clear()
+            mainViewModel.loadData()
+        }
 
-        /*binding.findImageButton.setOnClickListener {
-            binding.findMoreButton.visibility = VISIBLE
-            if (listData.isNotEmpty()) {
-                binding.recyclerView.adapter?.notifyItemRangeRemoved(0, listData.size)
-                listData.clear()
-            }
-
-            getFilteredHeadlinesUseCase = getFilteredHeadlinesUseCase.updateFilters(
+        binding.findImageButton.setOnClickListener {
+            mainViewModel.setFilters(
                 binding.keywordsEditText.text.toString(),
                 binding.countrySpinner.selectedItem.toString().lowercase(Locale.getDefault()),
                 binding.categorySpinner.selectedItem.toString().lowercase(Locale.getDefault())
             )
-
-            MainScope().launch {
-                getHeadlinesUseCase.execute().let {
-                    if (it.isNotEmpty()) {
-                        listData.addAll(getFilteredHeadlinesUseCase.execute())
-                        binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
-                    }
-                }
-            }
-            // make findMoreButton showing filtered articles
-            binding.findMoreButton.setOnClickListener { button ->
-                MainScope().launch {
-                    getHeadlinesUseCase.execute().let {
-                        if (it.isNotEmpty()) {
-                            listData.addAll(getFilteredHeadlinesUseCase.execute())
-                            binding.recyclerView.adapter?.notifyItemInserted(listData.size - 1)
-                        } else button.visibility = GONE
-                    }
-                }
-            }
-        }*/
+            headlinesAdapter.clear()
+            mainViewModel.setFilteredFinding(true)
+            mainViewModel.loadMoreHeadlines()
+        }
 
         mainViewModel.headlinesLiveData.observe(this) { updatedArticlesList ->
             Log.d("AAA", "observed : " + updatedArticlesList.size)

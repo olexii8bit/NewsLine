@@ -4,6 +4,7 @@ import com.example.newsline.domain.repository.ArticleRepository
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.LocationService
+import com.example.newsline.domain.NoMoreResultsException
 
 class GetHeadlinesUseCase(
     private val articleRepository: ArticleRepository,
@@ -18,8 +19,11 @@ class GetHeadlinesUseCase(
     fun getData(): List<Article> = data
 
     suspend fun tryToFetchData() {
-        try { data.addAll(articleRepository.get(++pageNumber, countryCode)) }
-        catch (e: Exception) {
+        try { articleRepository.get(++pageNumber, countryCode).let{
+                if (it.isEmpty()) throw NoMoreResultsException()
+                else data.addAll(it)
+            }
+        } catch (e: Exception) {
             --pageNumber
             handleError.handle(e)
         }

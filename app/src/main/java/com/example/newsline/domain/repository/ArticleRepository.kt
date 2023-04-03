@@ -7,9 +7,9 @@ interface ArticleRepository {
     suspend fun get(pageNumber: Int,
                     countryCode: String = "us"): List<Article>
 
-    /*suspend fun getArticlesFiltered(pageNumber: Int,
-                                    keyWords: String,
-                                    countryCode: String,
-                                    category: String): List<Article>*/
+    suspend fun getFiltered(pageNumber: Int,
+                             keyWords: String,
+                             countryCode: String,
+                             category: String): List<Article>
 
 }

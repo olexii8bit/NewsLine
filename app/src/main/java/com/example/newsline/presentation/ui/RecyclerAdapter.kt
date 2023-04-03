@@ -32,6 +32,11 @@ class RecyclerAdapter(
         notifyDataSetChanged()
     }
 
+    fun clear() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
     fun updateData(list: List<Article>) {
         for (newItem in list) {
             if(!items.contains(newItem)) {
