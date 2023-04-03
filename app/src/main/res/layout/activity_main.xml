@@ -95,19 +95,38 @@
                     android:src="@drawable/ic_find" />
 
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
 
-            <ImageButton
-                android:id="@+id/filterImageButton"
-                android:layout_width="50dp"
-                android:layout_height="20dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_filter"
-                android:scaleType="fitCenter"
-                android:layout_marginEnd="@dimen/smallMargin"
-                android:layout_marginBottom="@dimen/bigMargin"
-                android:background="@color/white"
-                android:elevation="10dp"
-                android:contentDescription="Filter" />
+                <ImageButton
+                    android:id="@+id/filterOffImageButton"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_filter_off"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="@dimen/smallMargin"
+                    android:layout_marginBottom="@dimen/bigMargin"
+                    android:background="@color/white"
+                    android:elevation="10dp"
+                    android:contentDescription="Clear filters" />
+
+                <ImageButton
+                    android:id="@+id/filterImageButton"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_filter"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="@dimen/smallMargin"
+                    android:layout_marginBottom="@dimen/bigMargin"
+                    android:background="@color/white"
+                    android:elevation="10dp"
+                    android:contentDescription="Filter" />
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

@@ -1,111 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/bigMargin"
-    android:layout_marginBottom="@dimen/bigMargin"
-    android:layout_marginEnd="@dimen/smallMargin"
-    android:layout_marginStart="@dimen/smallMargin"
-    android:orientation="vertical"
-    android:background="@android:color/white"
-    android:elevation="5dp">
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/smallMargin"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="180dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/smallMargin"
-            android:contentDescription="articlePoster"
-            app:srcCompat="@android:drawable/ic_menu_report_image"/>
-        <TextView
-            android:id="@+id/verticalLine"
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/smallMargin"
-            android:background="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginTop="@dimen/bigMargin"
+        android:layout_marginBottom="@dimen/bigMargin"
+        android:layout_marginEnd="@dimen/smallMargin"
+        android:layout_marginStart="@dimen/smallMargin"
+        android:background="@android:color/white"
+        android:elevation="5dp"
+        app:cardCornerRadius="@dimen/bigCornerRadius">
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/smallMargin"
-            android:maxHeight="150dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintStart_toEndOf="@+id/verticalLine"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/titleTextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="6"
-                android:ellipsize="end"
-                android:text="Tssssssssssооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооsggggggggggggggggggggggggggggggggggggggggggggggggssssssssssссссссссссссссссссссссссссссссссссссссссссссsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssitle" />
-            <TextView
-                android:id="@+id/authorTextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Souвввввооооооооооооооооооооооооооооооооооооооооооооооовввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввrce" />
-        </LinearLayout>
-    </LinearLayout>
-    <TextView
-        android:id="@+id/horizontalLine"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="1dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/black"/>
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/smallMargin"
-        android:layout_marginStart="@dimen/bigMargin"
-        android:layout_marginEnd="@dimen/bigMargin"
-        android:text="Sourdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddce" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/smallMargin"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/publishedAtTextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:maxLines="1"
-            android:layout_margin="@dimen/smallMargin"
-            android:text="TIME"/>
-        <TextView
-            android:id="@+id/toArticleHyperLinkTextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:maxLines="1"
-            android:textColor="@android:color/holo_blue_light"
-            android:textAlignment="textEnd"
-            android:layout_margin="@dimen/smallMargin"
-            android:text="See details..."/>
-    </LinearLayout>
-</LinearLayout>
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/bigCornerRadius">
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="articlePoster"
+                    android:adjustViewBounds="true"
+                    tools:src="@drawable/ic_launcher_background"/>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/smallMargin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/verticalLine"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/smallMargin"
+                    android:background="@color/black"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/smallMargin"
+                    android:maxHeight="150dp"
+                    app:layout_constrainedWidth="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/titleTextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="6"
+                        android:ellipsize="end"
+                        tools:text="Tssssssssssооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооsggggggggggggggggggggggggggggggggggggggggggggggggssssssssssссссссссссссссссссссссссссссссссссссссссссссsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssitle" />
+
+                    <TextView
+                        android:id="@+id/authorTextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Souвввввооооооооооооооооооооооооооооооооооооооооооооооовввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввввrce" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/horizontalLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="1dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/black" />
+
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/smallMargin"
+                android:layout_marginStart="@dimen/bigMargin"
+                android:layout_marginEnd="@dimen/bigMargin"
+                tools:text="Sourdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddce" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/smallMargin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/publishedAtTextView"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:layout_margin="@dimen/smallMargin"
+                    tools:text="TIME" />
+
+                <TextView
+                    android:id="@+id/toArticleHyperLinkTextView"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textAlignment="textEnd"
+                    android:layout_margin="@dimen/smallMargin"
+                    android:text="See details..." />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

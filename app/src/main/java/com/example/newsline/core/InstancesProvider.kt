@@ -5,6 +5,7 @@ import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.repository.ArticleRepository
 import com.example.newsline.domain.usecase.GetHeadlinesUseCase
 import com.example.newsline.domain.LocationService
+import com.example.newsline.domain.usecase.GetFilteredHeadlinesUseCase
 import com.example.newsline.presentation.ManageMessage
 
 interface InstancesProvider: ErrorHandlerInstancesProvider, ArticleInstancesProvider {
@@ -21,5 +22,6 @@ interface ErrorHandlerInstancesProvider {
 interface ArticleInstancesProvider {
     fun provideArticleRepository(): ArticleRepository
     fun provideGetHeadlinesUseCase(): GetHeadlinesUseCase
+    fun provideGetFilteredHeadlinesUseCase(): GetFilteredHeadlinesUseCase
     fun provideApiService(): ApiService
 }

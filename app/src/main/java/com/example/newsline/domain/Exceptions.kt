@@ -6,3 +6,5 @@ class NoInternetConnectionException: Exception()
 class ServiceUnavailableException: Exception()
 
 class GenericException: Exception()
+
+class NoMoreResultsException: Exception()

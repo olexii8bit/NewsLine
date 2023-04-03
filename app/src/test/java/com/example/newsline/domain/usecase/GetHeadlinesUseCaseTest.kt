@@ -24,8 +24,9 @@ internal class GetHeadlinesUseCaseTest {
     }
 
 }
+/*
 class FakeArticleRepository: ArticleRepository {
     override suspend fun get(pageNumber: Int, countryCode: String): List<Article> {
         return emptyList()
     }
-}
+}*/

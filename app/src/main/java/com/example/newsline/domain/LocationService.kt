@@ -8,6 +8,7 @@ import com.example.newsline.data.newsApi.enums.Country
 interface LocationService {
 
     fun getCurrentLocationCountry(): String
+    fun getCurrentLocationCountryCode(): Country
 
     class Base(private val currentContext: Context): LocationService {
         override fun getCurrentLocationCountry(): String {
@@ -17,6 +18,15 @@ interface LocationService {
                 if (it.value == currentCode) return currentCode
             }
             return "us"
+        }
+
+        override fun getCurrentLocationCountryCode(): Country {
+            val telephonyManager = currentContext.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+            val currentCode = telephonyManager.networkCountryIso
+            Country.values().forEach {
+                if (it.value == currentCode) return it
+            }
+            return Country.US
         }
     }
 }
