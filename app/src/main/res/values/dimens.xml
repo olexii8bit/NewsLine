@@ -2,4 +2,5 @@
 <resources>
     <dimen name="bigMargin">10dp</dimen>
     <dimen name="smallMargin">4dp</dimen>
+    <dimen name="bigCornerRadius">10dp</dimen>
 </resources>

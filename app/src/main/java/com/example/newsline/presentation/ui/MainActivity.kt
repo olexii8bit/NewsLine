@@ -21,10 +21,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val articlesList = mutableListOf<Article>()
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = RecyclerAdapter(this@MainActivity, articlesList)
+        val headlinesAdapter = RecyclerAdapter(this@MainActivity)
+        with(binding.recyclerView) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = headlinesAdapter
+        }
         /*binding.countrySpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
         val countrySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Country.values())
         binding.countrySpinner.setSelection(countrySpinnerAdapter.getPosition(Location.Base().getCurrentCountryCode()))
@@ -82,11 +83,9 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
-        mainViewModel.headlinesLiveData.observe(this) { newArticlesList ->
-            Log.d("AAA", "observed : " + newArticlesList.size)
-            articlesList.clear()
-            articlesList.addAll(newArticlesList)
-            binding.recyclerView.adapter!!.notifyDataSetChanged()
+        mainViewModel.headlinesLiveData.observe(this) { updatedArticlesList ->
+            Log.d("AAA", "observed : " + updatedArticlesList.size)
+            headlinesAdapter.updateData(updatedArticlesList)
         }
 
         binding.findMoreButton.setOnClickListener { button ->

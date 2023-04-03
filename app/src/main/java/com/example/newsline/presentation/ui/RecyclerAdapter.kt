@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsline.R
+import com.example.newsline.databinding.NewsListElementBinding
 import com.example.newsline.domain.models.Article
 import java.security.PrivateKey
 import java.text.SimpleDateFormat
@@ -20,18 +21,28 @@ import java.util.*
 import kotlin.collections.Collection
 
 class RecyclerAdapter(
-    private val context: Context,
-    private val items: MutableList<Article>
+    private val context: Context
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
+    private val items = mutableListOf<Article>()
+
+    fun setNewData(list: List<Article>) {
+        items.clear()
+        items.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun updateData(list: List<Article>) {
+        for (newItem in list) {
+            if(!items.contains(newItem)) {
+                items.add(newItem)
+                notifyItemInserted(items.size - 1)
+            }
+        }
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
-        val authorTextView: TextView = itemView.findViewById(R.id.authorTextView)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.descriptionTextView)
-        val publishedAtTextView: TextView = itemView.findViewById(R.id.publishedAtTextView)
-        val toArticleHyperLinkTextView: TextView =
-            itemView.findViewById(R.id.toArticleHyperLinkTextView)
+        val binding = NewsListElementBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,38 +53,38 @@ class RecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (!items[position].urlToImage.isNullOrEmpty()) {
-            Glide.with(context)
-                .load(items[position].urlToImage)
-                .centerCrop()
-                .placeholder(androidx.appcompat.R.drawable.abc_ic_menu_selectall_mtrl_alpha)
-                .into(holder.imageView)
+        holder.binding.apply {
+            if (!items[position].urlToImage.isNullOrEmpty()) {
+                Glide.with(context)
+                    .load(items[position].urlToImage)
+                    .placeholder(androidx.appcompat.R.drawable.abc_ic_menu_selectall_mtrl_alpha)
+                    .into(imageView)
+            } else imageCardView.visibility = GONE
 
-        } else holder.imageView.visibility = GONE
+            titleTextView.text = items[position].title
 
-        holder.titleTextView.text = items[position].title
+            authorTextView.text = items[position].author
 
-        holder.authorTextView.text = items[position].author
+            if (!items[position].description.isNullOrEmpty()) {
+                descriptionTextView.text = items[position].description
+            } else descriptionTextView.visibility = GONE
 
-        if (!items[position].description.isNullOrEmpty()) {
-            holder.descriptionTextView.text = items[position].description
-        } else holder.descriptionTextView.visibility = GONE
+            if (!items[position].publishedAt.isNullOrEmpty()) {
+                val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                val date: Date = inputDateFormat.parse(items[position].publishedAt)!!
+                val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                val outputDateString = outputDateFormat.format(date)
+                publishedAtTextView.text = outputDateString
+            } else publishedAtTextView.visibility = GONE
 
-        if (!items[position].publishedAt.isNullOrEmpty()) {
-            val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-            val date: Date = inputDateFormat.parse(items[position].publishedAt)!!
-            val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            val outputDateString = outputDateFormat.format(date)
-            holder.publishedAtTextView.text = outputDateString
-        } else holder.publishedAtTextView.visibility = GONE
-
-        if (!items[position].url.isNullOrEmpty()) {
-            holder.toArticleHyperLinkTextView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(items[position].url)
-                startActivity(context, intent, null)
-            }
-        } else holder.toArticleHyperLinkTextView.visibility = GONE
+            if (!items[position].url.isNullOrEmpty()) {
+                toArticleHyperLinkTextView.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(items[position].url)
+                    startActivity(context, intent, null)
+                }
+            } else toArticleHyperLinkTextView.visibility = GONE
+        }
     }
 
     override fun getItemCount() = items.size
