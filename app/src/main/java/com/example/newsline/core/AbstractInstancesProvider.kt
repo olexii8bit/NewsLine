@@ -2,11 +2,11 @@ package com.example.newsline.core
 
 import com.example.newsline.data.newsApi.ApiService
 import com.example.newsline.data.newsApi.RetrofitInstance
-import com.example.newsline.data.repository.ArticleRepositoryImpl
+import com.example.newsline.data.repository.NewsRepositoryImpl
 import com.example.newsline.domain.HandleError
-import com.example.newsline.domain.repository.ArticleRepository
-import com.example.newsline.domain.usecase.GetFilteredHeadlinesUseCase
-import com.example.newsline.domain.usecase.GetHeadlinesUseCase
+import com.example.newsline.domain.repository.NewsRepository
+import com.example.newsline.domain.usecase.GetFilteredNewsUseCase
+import com.example.newsline.domain.usecase.GetNewsUseCase
 
 abstract class AbstractInstancesProvider: InstancesProvider {
 
@@ -19,21 +19,21 @@ abstract class AbstractInstancesProvider: InstancesProvider {
     override fun provideDataErrorHandler(): HandleError =
         HandleError.DataError()
 
-    override fun provideArticleRepository(): ArticleRepository =
-        ArticleRepositoryImpl(
+    override fun provideArticleRepository(): NewsRepository =
+        NewsRepositoryImpl(
             provideDataErrorHandler(),
             provideApiService()
         )
 
-    override fun provideGetHeadlinesUseCase(): GetHeadlinesUseCase =
-        GetHeadlinesUseCase(
+    override fun provideGetHeadlinesUseCase(): GetNewsUseCase =
+        GetNewsUseCase(
             provideArticleRepository(),
             provideDomainErrorHandler(),
             provideLocationService()
         )
 
-    override fun provideGetFilteredHeadlinesUseCase(): GetFilteredHeadlinesUseCase =
-        GetFilteredHeadlinesUseCase(
+    override fun provideGetFilteredHeadlinesUseCase(): GetFilteredNewsUseCase =
+        GetFilteredNewsUseCase(
             provideArticleRepository(),
             provideDomainErrorHandler(),
         )

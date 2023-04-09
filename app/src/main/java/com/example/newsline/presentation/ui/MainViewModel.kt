@@ -5,25 +5,24 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.newsline.domain.usecase.GetHeadlinesUseCase
+import com.example.newsline.domain.usecase.GetNewsUseCase
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.usecase.GetFilteredHeadlinesUseCase
+import com.example.newsline.domain.usecase.GetFilteredNewsUseCase
 import com.example.newsline.presentation.App
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val getHeadlinesUseCase: GetHeadlinesUseCase =
+    private val getNewsUseCase: GetNewsUseCase =
         (app as App).instanceProvider.provideGetHeadlinesUseCase()
-    private val getFilteredHeadlinesUseCase: GetFilteredHeadlinesUseCase =
+    private val getFilteredNewsUseCase: GetFilteredNewsUseCase =
         (app as App).instanceProvider.provideGetFilteredHeadlinesUseCase()
     private val handleError: HandleError =
         (app as App).instanceProvider.providePresentationErrorHandler()
 
-    val headlinesLiveData = MutableLiveData(mutableListOf<Article>())
+    val newsLiveData = MutableLiveData(mutableListOf<Article>())
 
     private var filteredFinding = false
 
@@ -43,19 +42,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun setFilters(keyWords: String,
                    countryCode: String,
                    category: String) =
-        getFilteredHeadlinesUseCase.setFilters(keyWords, countryCode, category)
+        getFilteredNewsUseCase.setFilters(keyWords, countryCode, category)
 
     fun loadData() = if (filteredFinding) {
-        headlinesLiveData.postValue(getFilteredHeadlinesUseCase.getData() as MutableList<Article>)
+        newsLiveData.postValue(getFilteredNewsUseCase.getData() as MutableList<Article>)
     } else {
-        headlinesLiveData.postValue(getHeadlinesUseCase.getData() as MutableList<Article>)
+        newsLiveData.postValue(getNewsUseCase.getData() as MutableList<Article>)
     }
 
     fun loadMoreHeadlines() {
         if (filteredFinding) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    getFilteredHeadlinesUseCase.tryToFetchData()
+                    getFilteredNewsUseCase.tryToFetchData()
                 } catch (e: Exception) {
                     viewModelScope.launch(Dispatchers.Main) { handleError.handle(e) }
                     return@launch
@@ -66,7 +65,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    getHeadlinesUseCase.tryToFetchData()
+                    getNewsUseCase.tryToFetchData()
                 } catch (e: Exception) {
                     viewModelScope.launch(Dispatchers.Main) { handleError.handle(e) }
                     return@launch

@@ -1,6 +1,6 @@
 package com.example.newsline.data.repository
 
-import com.example.newsline.domain.repository.ArticleRepository
+import com.example.newsline.domain.repository.NewsRepository
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.NoInternetConnectionException
 import com.example.newsline.domain.ServiceUnavailableException
@@ -17,7 +17,7 @@ private const val TEST_TOTAL_ARTICLES = 31
 private const val TEST_PAGE_SIZE = 10
 private const val TEST_TOTAL_PAGES = 4
 
-internal class ArticleRepositoryImplTest {
+internal class NewsRepositoryImplTest {
 
     private lateinit var fakeApiService: FakeApiService
     private lateinit var errorHandler: HandleError
@@ -30,38 +30,38 @@ internal class ArticleRepositoryImplTest {
 
     @Test
     fun get_returns_list_of_articles() {
-        val articleRepository: ArticleRepository =
-            ArticleRepositoryImpl(
+        val newsRepository: NewsRepository =
+            NewsRepositoryImpl(
                 errorHandler,
                 fakeApiService)
         val expected: List<Article> = List(TEST_PAGE_SIZE) {
             Article(Source())
         }
         for (pageNumber in 1..TEST_TOTAL_PAGES) {
-            val actual = runBlocking{ articleRepository.get(pageNumber) }
+            val actual = runBlocking{ newsRepository.get(pageNumber) }
             assertEquals(expected, actual)
         }
     }
 
     @Test
     fun get_returns_empty_list() = runBlocking {
-        val articleRepository: ArticleRepository =
-            ArticleRepositoryImpl(
+        val newsRepository: NewsRepository =
+            NewsRepositoryImpl(
                 errorHandler,
                 fakeApiService)
         val expected: List<Article> = emptyList()
 
         for (pageNumber in TEST_TOTAL_PAGES+1..10) {
-            val actual = articleRepository.get(pageNumber)
+            val actual = newsRepository.get(pageNumber)
             assertEquals(expected, actual)
         }
         for (pageNumber in -10..0) {
-            val actual = articleRepository.get(pageNumber)
+            val actual = newsRepository.get(pageNumber)
             assertEquals(expected, actual)
         }
 
         fakeApiService.changeHasResults(false)
-        val actual = articleRepository.get(1)
+        val actual = newsRepository.get(1)
         assertEquals(expected, actual)
     }
 
@@ -69,21 +69,21 @@ internal class ArticleRepositoryImplTest {
     fun get_throws_exception(): Unit = runBlocking {
         assertThrows<NoInternetConnectionException>{
             fakeApiService.changeConnection(false)
-            val articleRepository: ArticleRepository =
-                ArticleRepositoryImpl(
+            val newsRepository: NewsRepository =
+                NewsRepositoryImpl(
                     errorHandler,
                     fakeApiService)
-            articleRepository.get(1)
+            newsRepository.get(1)
         }
         fakeApiService.changeConnection(true)
 
         assertThrows<ServiceUnavailableException> {
             fakeApiService.changeResponseStatus(false)
-            val articleRepository: ArticleRepository =
-                ArticleRepositoryImpl(
+            val newsRepository: NewsRepository =
+                NewsRepositoryImpl(
                     errorHandler,
                     fakeApiService)
-            articleRepository.get(1)
+            newsRepository.get(1)
         }
     }
 }

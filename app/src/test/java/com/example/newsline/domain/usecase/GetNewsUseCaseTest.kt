@@ -1,12 +1,10 @@
 package com.example.newsline.domain.usecase
 
-import com.example.newsline.domain.repository.ArticleRepository
-import com.example.newsline.domain.models.Article
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class GetHeadlinesUseCaseTest {
+internal class GetNewsUseCaseTest {
 
     @Test
     fun execute_returns_list() {
@@ -25,7 +23,7 @@ internal class GetHeadlinesUseCaseTest {
 
 }
 /*
-class FakeArticleRepository: ArticleRepository {
+class FakeArticleRepository: NewsRepository {
     override suspend fun get(pageNumber: Int, countryCode: String): List<Article> {
         return emptyList()
     }

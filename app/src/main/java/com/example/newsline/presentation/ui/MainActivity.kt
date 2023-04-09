@@ -1,6 +1,5 @@
 package com.example.newsline.presentation.ui
 
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -12,9 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsline.R
 import com.example.newsline.databinding.ActivityMainBinding
-import com.example.newsline.domain.models.Article
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import androidx.activity.viewModels
 import com.example.newsline.data.newsApi.enums.Category
 import com.example.newsline.data.newsApi.enums.Country
@@ -80,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.loadMoreHeadlines()
         }
 
-        mainViewModel.headlinesLiveData.observe(this) { updatedArticlesList ->
+        mainViewModel.newsLiveData.observe(this) { updatedArticlesList ->
             Log.d("AAA", "observed : " + updatedArticlesList.size)
             headlinesAdapter.updateData(updatedArticlesList)
         }

@@ -2,14 +2,14 @@ package com.example.newsline.data.repository
 
 import com.example.newsline.data.newsApi.RetrofitInstance
 import com.example.newsline.data.newsApi.ApiService
-import com.example.newsline.domain.repository.ArticleRepository
+import com.example.newsline.domain.repository.NewsRepository
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.models.Article
 
-class ArticleRepositoryImpl(
+class NewsRepositoryImpl(
     private val handleError: HandleError = HandleError.DataError(),
     private val apiService: ApiService = RetrofitInstance.service,
-) : ArticleRepository {
+) : NewsRepository {
 
     override suspend fun get(
         pageNumber: Int,

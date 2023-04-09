@@ -1,13 +1,12 @@
 package com.example.newsline.domain.usecase
 
 import com.example.newsline.domain.HandleError
-import com.example.newsline.domain.LocationService
 import com.example.newsline.domain.NoMoreResultsException
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.repository.ArticleRepository
+import com.example.newsline.domain.repository.NewsRepository
 
-class GetFilteredHeadlinesUseCase(
-    private val articleRepository: ArticleRepository,
+class GetFilteredNewsUseCase(
+    private val newsRepository: NewsRepository,
     private val handleError: HandleError = HandleError.DomainError()
 ) {
     private val data = mutableListOf<Article>()
@@ -32,7 +31,7 @@ class GetFilteredHeadlinesUseCase(
 
     suspend fun tryToFetchData() {
         try {
-            articleRepository.getFiltered(
+            newsRepository.getFiltered(
                 ++pageNumber,
                 keyWords = keyWords,
                 countryCode = countryCode,
