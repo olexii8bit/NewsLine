@@ -1,4 +1,4 @@
-package com.example.newsline.data.newsApi.enums
+package com.example.newsline.data.remoteDatasource.enums
 
 enum class Country(val value: String) {
     AE("ae"), AR("ar"), AT("at"), AU("au"), BE("be"), BG("bg"), BR("br"), CA("ca"), CH("ch"), CN("cn"), CO("co"), CU("cu"),

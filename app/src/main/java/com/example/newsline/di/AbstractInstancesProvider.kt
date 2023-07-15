@@ -1,12 +1,12 @@
-package com.example.newsline.core
+package com.example.newsline.di
 
-import com.example.newsline.data.newsApi.ApiService
-import com.example.newsline.data.newsApi.RetrofitInstance
+import com.example.newsline.data.remoteDatasource.ApiService
+import com.example.newsline.data.remoteDatasource.RetrofitInstance
 import com.example.newsline.data.repository.NewsRepositoryImpl
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.repository.NewsRepository
-import com.example.newsline.domain.usecase.GetFilteredNewsUseCase
 import com.example.newsline.domain.usecase.GetNewsUseCase
+import com.example.newsline.domain.usecase.GetNewsUseCase.GetNewsUseCaseImpl
 
 abstract class AbstractInstancesProvider: InstancesProvider {
 
@@ -25,17 +25,10 @@ abstract class AbstractInstancesProvider: InstancesProvider {
             provideApiService()
         )
 
-    override fun provideGetHeadlinesUseCase(): GetNewsUseCase =
-        GetNewsUseCase(
+    override fun provideGetNewsUseCase(): GetNewsUseCase =
+        GetNewsUseCaseImpl(
             provideArticleRepository(),
-            provideDomainErrorHandler(),
-            provideLocationService()
-        )
-
-    override fun provideGetFilteredHeadlinesUseCase(): GetFilteredNewsUseCase =
-        GetFilteredNewsUseCase(
-            provideArticleRepository(),
-            provideDomainErrorHandler(),
+            provideDomainErrorHandler()
         )
 
     override fun provideApiService(): ApiService =

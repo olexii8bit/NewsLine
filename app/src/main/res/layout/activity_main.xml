@@ -143,7 +143,7 @@
                 android:id="@+id/findMoreButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Load more"
+                android:text="@string/loadMore"
                 android:textColor="@color/black"
                 android:layout_gravity="center_horizontal" />
 

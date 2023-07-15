@@ -88,7 +88,7 @@ internal class NewsRepositoryImplTest {
     }
 }
 
-class FakeApiService: com.example.newsline.data.newsApi.ApiService {
+class FakeApiService: com.example.newsline.data.remoteDatasource.ApiService {
 
     private var isInternetConnection: Boolean = true
     private var statusOk: Boolean = true

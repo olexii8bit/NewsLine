@@ -1,7 +1,8 @@
 package com.example.newsline.data.repository
 
-import com.example.newsline.data.newsApi.RetrofitInstance
-import com.example.newsline.data.newsApi.ApiService
+import android.util.Log
+import com.example.newsline.data.remoteDatasource.RetrofitInstance
+import com.example.newsline.data.remoteDatasource.ApiService
 import com.example.newsline.domain.repository.NewsRepository
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.models.Article
@@ -10,23 +11,7 @@ class NewsRepositoryImpl(
     private val handleError: HandleError = HandleError.DataError(),
     private val apiService: ApiService = RetrofitInstance.service,
 ) : NewsRepository {
-
-    override suspend fun get(
-        pageNumber: Int,
-        countryCode: String,
-    ): List<Article> {
-        return try {
-            apiService.getHeadlines(
-                country = countryCode,
-                page = pageNumber
-            ).articles.toList()
-        } catch (e: Exception) {
-            handleError.handle(e)
-            return emptyList()
-        }
-    }
-
-    override suspend fun getFiltered(
+    override suspend fun getArticles(
         pageNumber: Int,
         keyWords: String,
         countryCode: String,
@@ -40,6 +25,7 @@ class NewsRepositoryImpl(
                 page = pageNumber
             ).articles.toList()
         } catch (e: Exception) {
+            Log.d("ddd", e.message.toString())
             handleError.handle(e)
             return emptyList()
         }

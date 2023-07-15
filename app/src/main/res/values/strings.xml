@@ -2,4 +2,6 @@
     <string name="app_name">NewsLine</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loadMore">Load more</string>
+    <string name="loading">Loading…</string>
 </resources>

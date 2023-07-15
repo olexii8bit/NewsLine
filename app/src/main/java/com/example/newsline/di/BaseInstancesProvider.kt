@@ -1,7 +1,8 @@
-package com.example.newsline.core
+package com.example.newsline.di
 
 import android.content.Context
 import com.example.newsline.domain.LocationService
+import com.example.newsline.presentation.LocationServiceImpl
 import com.example.newsline.presentation.ManageMessage
 
 class BaseInstancesProvider(
@@ -11,6 +12,6 @@ class BaseInstancesProvider(
         ManageMessage.ManageToastMessage(context)
 
     override fun provideLocationService(): LocationService =
-        LocationService.Base(context)
+        LocationServiceImpl(context)
 
 }

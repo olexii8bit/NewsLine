@@ -1,4 +1,4 @@
-package com.example.newsline.data.newsApi.enums
+package com.example.newsline.data.remoteDatasource.enums
 
 enum class Category(val value: String) {
     BUSINESS("business"),

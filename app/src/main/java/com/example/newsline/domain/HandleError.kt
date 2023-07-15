@@ -1,5 +1,6 @@
 package com.example.newsline.domain
 
+import android.util.Log
 import com.example.newsline.presentation.ManageMessage
 import java.net.UnknownHostException
 
@@ -14,7 +15,10 @@ interface HandleError {
                 is NoInternetConnectionException -> manageMessage.show("No internet connection", 3)
                 is ServiceUnavailableException -> manageMessage.show("News service unavailable", 3)
                 is NoMoreResultsException -> manageMessage.show("No more results", 3)
-                else -> manageMessage.show("Something went wrong", 3)
+                else -> {
+                    manageMessage.show("Something went wrong", 3)
+                    Log.d("ddd", "Error message - " +exception.message.toString())
+                }
             }
         }
     }

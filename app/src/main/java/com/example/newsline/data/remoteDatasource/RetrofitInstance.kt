@@ -1,4 +1,4 @@
-package com.example.newsline.data.newsApi
+package com.example.newsline.data.remoteDatasource
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
