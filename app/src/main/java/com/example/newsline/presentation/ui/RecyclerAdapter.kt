@@ -1,5 +1,9 @@
+@file:Suppress("UselessCallOnNotNull")
+@file:SuppressLint("NotifyDataSetChanged")
+
 package com.example.newsline.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -7,18 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsline.R
 import com.example.newsline.databinding.NewsListElementBinding
 import com.example.newsline.domain.models.Article
-import java.security.PrivateKey
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.Collection
+import java.util.Date
 
 class RecyclerAdapter(
     private val context: Context
@@ -56,6 +56,7 @@ class RecyclerAdapter(
         return ViewHolder(itemView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.apply {
             if (!items[position].urlToImage.isNullOrEmpty()) {
@@ -65,9 +66,13 @@ class RecyclerAdapter(
                     .into(imageView)
             } else imageCardView.visibility = GONE
 
-            titleTextView.text = items[position].title
+            if (!items[position].title.isNullOrEmpty()) {
+                titleTextView.text = items[position].title
+            } else titleTextView.visibility = GONE
 
-            authorTextView.text = items[position].author
+            if (!items[position].author.isNullOrEmpty()) {
+                authorTextView.text = items[position].title
+            } else authorTextView.visibility = GONE
 
             if (!items[position].description.isNullOrEmpty()) {
                 descriptionTextView.text = items[position].description

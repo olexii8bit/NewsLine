@@ -2,5 +2,9 @@
 <resources>
     <dimen name="bigMargin">10dp</dimen>
     <dimen name="smallMargin">4dp</dimen>
+    <dimen name="bigPadding">10dp</dimen>
     <dimen name="bigCornerRadius">10dp</dimen>
+    <dimen name="elevation">10dp</dimen>
+    <dimen name="filterButtonWidth">80dp</dimen>
+    <dimen name="filterButtonHeight">48dp</dimen>
 </resources>

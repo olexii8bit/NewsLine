@@ -13,6 +13,7 @@ import com.example.newsline.R
 import com.example.newsline.data.remoteDatasource.enums.Category
 import com.example.newsline.data.remoteDatasource.enums.Country
 import com.example.newsline.databinding.ActivityMainBinding
+import com.example.newsline.domain.Filters
 import com.example.newsline.domain.LocationService
 import com.example.newsline.presentation.App
 import java.util.Locale
@@ -20,7 +21,7 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainModel by viewModels()
+    private val model: MainModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var articlesAdapter: RecyclerAdapter
     private lateinit var locationService: LocationService
@@ -32,15 +33,23 @@ class MainActivity : AppCompatActivity() {
 
         setUpUi()
 
-        mainViewModel.articles.observe(this) {
+        model.articles.observe(this) {
             articlesAdapter.setNewData(it)
             Log.d("ddd", "articles.observed : ${it.size}")
         }
-        mainViewModel.isFetchingNews.observe(this) { loading: Boolean ->
+        model.isFetchingNews.observe(this) { loading: Boolean ->
             if (loading)  binding.findMoreButton.text = resources.getString(R.string.loading)
             else binding.findMoreButton.text = resources.getString(R.string.loadMore)
             binding.findMoreButton.isEnabled = !loading
             Log.d("ddd", "isFetchingNews.observed : $loading")
+        }
+        model.filters.observe(this) { filters: Filters ->
+            if (filters.category.isNotEmpty() || filters.keyWords.isNotBlank()) {
+                binding.filterOffImageButton.visibility = VISIBLE
+            } else {
+                binding.filterOffImageButton.visibility = GONE
+            }
+            Log.d("ddd", "filters.observed : $filters")
         }
     }
 
@@ -78,24 +87,25 @@ class MainActivity : AppCompatActivity() {
         }
         // clear filters button
         binding.filterOffImageButton.setOnClickListener {
-            mainViewModel.setFilters(
+            model.setFilters(
                 "",
                 locationService.getCurrentLocationCountry(),
                 ""
             )
-            mainViewModel.loadArticles()
+            model.loadArticles()
+            binding.keywordsEditText.setText(R.string.empty)
             binding.filterRelativeLayout.visibility = GONE
         }
         // apply filters button
         binding.findImageButton.setOnClickListener {
-            mainViewModel.setFilters(
+            model.setFilters(
                 binding.keywordsEditText.text.toString(),
                 binding.countrySpinner.selectedItem.toString().lowercase(Locale.getDefault()),
                 binding.categorySpinner.selectedItem.toString().lowercase(Locale.getDefault())
             )
-            mainViewModel.loadArticles()
+            model.loadArticles()
         }
         // more articles button
-        binding.findMoreButton.setOnClickListener { mainViewModel.loadArticles() }
+        binding.findMoreButton.setOnClickListener { model.loadArticles() }
     }
 }
