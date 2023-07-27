@@ -1,4 +1,4 @@
-package com.example.newsline.presentation
+package com.example.newsline
 
 import android.app.Application
 import com.example.newsline.di.InstancesProvider

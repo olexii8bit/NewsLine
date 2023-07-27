@@ -1,19 +1,24 @@
 @file:Suppress("UselessCallOnNotNull")
-@file:SuppressLint("NotifyDataSetChanged")
 
 package com.example.newsline.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.newsline.R
 import com.example.newsline.databinding.NewsListElementBinding
 import com.example.newsline.domain.models.Article
@@ -29,70 +34,84 @@ class RecyclerAdapter(
     fun setNewData(list: List<Article>) {
         items.clear()
         items.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    fun clear() {
-        items.clear()
-        notifyDataSetChanged()
-    }
-
-    fun updateData(list: List<Article>) {
-        for (newItem in list) {
-            if(!items.contains(newItem)) {
-                items.add(newItem)
-                notifyItemInserted(items.size - 1)
-            }
-        }
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding = NewsListElementBinding.bind(itemView)
+        notifyItemRangeChanged(0, list.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.news_list_element, parent, false)
-        return ViewHolder(itemView)
+        val binding = 
+            NewsListElementBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, context)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(items.isNotEmpty()) { holder.bind(items[position]) }
     }
 
     @SuppressLint("SimpleDateFormat")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.apply {
-            if (!items[position].urlToImage.isNullOrEmpty()) {
-                Glide.with(context)
-                    .load(items[position].urlToImage)
-                    .placeholder(androidx.appcompat.R.drawable.abc_ic_menu_selectall_mtrl_alpha)
-                    .into(imageView)
-            } else imageCardView.visibility = GONE
+    class ViewHolder(private val binding: NewsListElementBinding, private val context: Context)
+        : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Article) {
+            binding.apply {
+                if (!item.urlToImage.isNullOrEmpty()) {
+                    Log.d("ddd", item.urlToImage)
+                    Glide.with(context)
+                        .load(item.urlToImage)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean,
+                            ): Boolean {
+                                imageCardView.visibility = View.GONE
+                                return true
+                            }
 
-            if (!items[position].title.isNullOrEmpty()) {
-                titleTextView.text = items[position].title
-            } else titleTextView.visibility = GONE
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean,
+                            ): Boolean {
+                                imageView.setImageDrawable(resource)
+                                return true
+                            }
 
-            if (!items[position].author.isNullOrEmpty()) {
-                authorTextView.text = items[position].title
-            } else authorTextView.visibility = GONE
+                        })
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(imageView)
+                } else imageCardView.visibility = View.GONE
 
-            if (!items[position].description.isNullOrEmpty()) {
-                descriptionTextView.text = items[position].description
-            } else descriptionTextView.visibility = GONE
+                if (!item.title.isNullOrEmpty()) {
+                    titleTextView.text = item.title
+                } else titleTextView.visibility = View.GONE
 
-            if (!items[position].publishedAt.isNullOrEmpty()) {
-                val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                val date: Date = inputDateFormat.parse(items[position].publishedAt)!!
-                val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                val outputDateString = outputDateFormat.format(date)
-                publishedAtTextView.text = outputDateString
-            } else publishedAtTextView.visibility = GONE
+                if (!item.author.isNullOrEmpty()) {
+                    authorTextView.text = item.title
+                } else authorTextView.visibility = View.GONE
 
-            if (!items[position].url.isNullOrEmpty()) {
-                toArticleHyperLinkTextView.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(items[position].url)
-                    startActivity(context, intent, null)
-                }
-            } else toArticleHyperLinkTextView.visibility = GONE
+                if (!item.description.isNullOrEmpty()) {
+                    descriptionTextView.text = item.description
+                } else descriptionTextView.visibility = View.GONE
+
+                if (!item.publishedAt.isNullOrEmpty()) {
+                    val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                    val date: Date = inputDateFormat.parse(item.publishedAt)!!
+                    val outputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                    val outputDateString = outputDateFormat.format(date)
+                    publishedAtTextView.text = outputDateString
+                } else publishedAtTextView.visibility = View.GONE
+
+                if (!item.url.isNullOrEmpty()) {
+                    toArticleHyperLinkTextView.setOnClickListener {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(item.url)
+                        ContextCompat.startActivity(context, intent, null)
+                    }
+                } else toArticleHyperLinkTextView.visibility = View.GONE
+            }
         }
     }
 

@@ -15,7 +15,7 @@ import com.example.newsline.data.remoteDatasource.enums.Country
 import com.example.newsline.databinding.ActivityMainBinding
 import com.example.newsline.domain.Filters
 import com.example.newsline.domain.LocationService
-import com.example.newsline.presentation.App
+import com.example.newsline.App
 import java.util.Locale
 
 

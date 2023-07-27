@@ -11,7 +11,7 @@ import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.LocationService
 import com.example.newsline.domain.models.Article
 import com.example.newsline.domain.usecase.GetNewsUseCase
-import com.example.newsline.presentation.App
+import com.example.newsline.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
