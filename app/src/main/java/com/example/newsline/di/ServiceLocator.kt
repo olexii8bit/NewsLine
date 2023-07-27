@@ -1,4 +1,4 @@
-package com.example.newsline.core
+package com.example.newsline.di
 
 import android.content.Context
 

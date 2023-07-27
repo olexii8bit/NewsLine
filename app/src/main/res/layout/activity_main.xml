@@ -33,12 +33,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:hint="Keywords">
+                    android:hint="@string/keywordsHint">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/keywordsEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:freezesText="true"
+                        android:textColorHint="#616161" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,19 +48,19 @@
                     android:id="@+id/countryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/keywordsTextInputLayout"
-                    android:layout_marginStart="@dimen/smallMargin"
-                    android:layout_marginTop="@dimen/smallMargin"
-                    android:text="Country:"
+                    android:layout_below="@id/keywordsTextInputLayout"
+                    android:layout_marginStart="@dimen/bigMargin"
+                    android:layout_marginTop="@dimen/bigMargin"
+                    android:text="@string/country"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Spinner
                     android:id="@+id/countrySpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/countryTextView"
+                    android:layout_alignBottom="@id/countryTextView"
                     android:layout_marginStart="@dimen/smallMargin"
-                    android:layout_marginTop="@dimen/smallMargin"
+                    android:layout_marginTop="@dimen/bigMargin"
                     android:layout_toEndOf="@id/countryTextView"
                     android:dropDownWidth="wrap_content" />
 
@@ -66,11 +68,11 @@
                     android:id="@+id/categoryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/countryTextView"
-                    android:layout_marginStart="@dimen/smallMargin"
+                    android:layout_below="@id/countryTextView"
+                    android:layout_marginStart="@dimen/bigMargin"
                     android:layout_marginTop="@dimen/smallMargin"
-                    android:layout_marginBottom="@dimen/smallMargin"
-                    android:text="Category:"
+                    android:layout_marginBottom="@dimen/bigMargin"
+                    android:text="@string/category"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Spinner
@@ -79,7 +81,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/countrySpinner"
                     android:layout_alignBottom="@+id/categoryTextView"
-                    android:layout_marginStart="@dimen/smallMargin"
                     android:layout_marginTop="@dimen/smallMargin"
                     android:layout_toEndOf="@id/categoryTextView" />
 
@@ -88,11 +89,12 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignBottom="@+id/categoryTextView"
+                    android:layout_alignBottom="@id/categoryTextView"
                     android:layout_alignParentBottom="false"
                     android:background="@color/white"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_find" />
+                    android:src="@drawable/ic_find"
+                    android:contentDescription="@string/findContentDescription" />
 
             </RelativeLayout>
             <LinearLayout
@@ -102,36 +104,36 @@
 
                 <ImageButton
                     android:id="@+id/filterOffImageButton"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/filterButtonWidth"
+                    android:layout_height="@dimen/filterButtonHeight"
                     android:layout_gravity="end"
                     android:src="@drawable/ic_filter_off"
                     android:scaleType="fitCenter"
-                    android:layout_marginEnd="@dimen/smallMargin"
-                    android:layout_marginBottom="@dimen/bigMargin"
+                    android:layout_marginEnd="@dimen/bigMargin"
+                    android:layout_marginBottom="@dimen/bigPadding"
                     android:background="@color/white"
-                    android:elevation="10dp"
-                    android:contentDescription="Clear filters" />
+                    android:elevation="@dimen/elevation"
+                    android:contentDescription="@string/clearFiltersContentDescription" />
 
                 <ImageButton
                     android:id="@+id/filterImageButton"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/filterButtonWidth"
+                    android:layout_height="@dimen/filterButtonHeight"
                     android:layout_gravity="end"
                     android:src="@drawable/ic_filter"
                     android:scaleType="fitCenter"
                     android:layout_marginEnd="@dimen/smallMargin"
-                    android:layout_marginBottom="@dimen/bigMargin"
+                    android:layout_marginBottom="@dimen/bigPadding"
                     android:background="@color/white"
-                    android:elevation="10dp"
-                    android:contentDescription="Filter" />
+                    android:elevation="@dimen/elevation"
+                    android:contentDescription="@string/filterContentDescription" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 tools:listitem="@layout/news_list_element"
-                app:layout_constraintTop_toBottomOf="@+id/filterImageButton"
+                app:layout_constraintTop_toBottomOf="@id/filterImageButton"
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +145,7 @@
                 android:id="@+id/findMoreButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Load more"
+                android:text="@string/loadMore"
                 android:textColor="@color/black"
                 android:layout_gravity="center_horizontal" />
 

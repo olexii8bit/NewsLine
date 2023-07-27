@@ -1,11 +1,11 @@
-package com.example.newsline.data.newsApi
+package com.example.newsline.data.remoteDatasource
 
-import com.example.newsline.domain.API_KEY
-import com.example.newsline.domain.PAGE_SIZE
 import com.example.newsline.domain.models.ResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+const val API_KEY = "5ff64f827b2f40778e1cdf7e6879f6dc"
+const val PAGE_SIZE = 10
 interface ApiService {
     /*@GET("v2/everything?apiKey=$API_KEY")
     suspend fun getAllNews(@Query("q") q: String,
