@@ -1,5 +1,3 @@
-@file:Suppress("UselessCallOnNotNull")
-
 package com.example.newsline.presentation.ui
 
 import android.annotation.SuppressLint
@@ -7,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -25,16 +23,41 @@ import com.example.newsline.domain.models.Article
 import java.text.SimpleDateFormat
 import java.util.Date
 
+class ArticlesDiffCallback(
+    private val oldItems: List<Article>,
+    private val newItems: List<Article>,
+): DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldItems.size
+
+    override fun getNewListSize(): Int = newItems.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = oldItems[oldItemPosition]
+        val newItem = newItems[newItemPosition]
+        return oldItem.url == newItem.url
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = oldItems[oldItemPosition]
+        val newItem = newItems[newItemPosition]
+        return oldItem == newItem
+    }
+
+}
+
 class RecyclerAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     private val items = mutableListOf<Article>()
 
-    fun setNewData(list: List<Article>) {
+    fun setNewData(newItems: List<Article>) {
+        val diffCallback = ArticlesDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         items.clear()
-        items.addAll(list)
-        notifyItemRangeChanged(0, list.size)
+        items.addAll(newItems)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,13 +70,13 @@ class RecyclerAdapter(
         if(items.isNotEmpty()) { holder.bind(items[position]) }
     }
 
+    @Suppress("UselessCallOnNotNull")
     @SuppressLint("SimpleDateFormat")
     class ViewHolder(private val binding: NewsListElementBinding, private val context: Context)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Article) {
             binding.apply {
                 if (!item.urlToImage.isNullOrEmpty()) {
-                    Log.d("ddd", item.urlToImage)
                     Glide.with(context)
                         .load(item.urlToImage)
                         .listener(object : RequestListener<Drawable> {
