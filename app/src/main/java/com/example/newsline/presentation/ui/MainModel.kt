@@ -6,12 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.newsline.App
 import com.example.newsline.domain.Filters
 import com.example.newsline.domain.HandleError
 import com.example.newsline.domain.LocationService
 import com.example.newsline.domain.models.Article
-import com.example.newsline.domain.usecase.GetNewsUseCase
-import com.example.newsline.App
+import com.example.newsline.domain.usecase.GetCachedNewsUseCase
+import com.example.newsline.domain.usecase.LoadNewsToCacheUseCase
+import com.example.newsline.domain.usecase.SetFiltersUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -26,8 +28,13 @@ interface MainModelCommunication {
 }
 class MainModel(app: Application) : AndroidViewModel(app), MainModelCommunication {
 
-    private val getNewsUseCase: GetNewsUseCase =
-        (app as App).instanceProvider.provideGetNewsUseCase()
+    private val loadNewsToCacheUseCase: LoadNewsToCacheUseCase =
+        (app as App).instanceProvider.provideLoadNewsToCacheUseCase()
+    private val getCachedNewsUseCase: GetCachedNewsUseCase =
+        (app as App).instanceProvider.provideGetCachedNewsUseCase()
+    private val setFiltersUseCase: SetFiltersUseCase =
+        (app as App).instanceProvider.provideSetFiltersUseCase()
+
     private val handleError: HandleError =
         (app as App).instanceProvider.providePresentationErrorHandler()
     private val locationService: LocationService =
@@ -59,20 +66,20 @@ class MainModel(app: Application) : AndroidViewModel(app), MainModelCommunicatio
         category: String,
     ) {
         val value = Filters(keyWords, countryCode, category)
-        getNewsUseCase.setFilters(value)
+        setFiltersUseCase.execute(value)
         _filters.value = value
         _articles.value = emptyList()
     }
 
     override fun loadCachedArticles() {
-        _articles.value = getNewsUseCase.getCache()
+        _articles.value = getCachedNewsUseCase.execute()
     }
 
     override fun loadArticles() {
         _isFetchingNews.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                getNewsUseCase.fetchData()
+                loadNewsToCacheUseCase.execute()
             } catch (e: Exception) {
                 viewModelScope.launch(Dispatchers.Main) {
                     handleError.handle(e)
@@ -80,7 +87,7 @@ class MainModel(app: Application) : AndroidViewModel(app), MainModelCommunicatio
                 }
                 return@launch
             }
-            _articles.postValue(getNewsUseCase.getCache())
+            _articles.postValue(getCachedNewsUseCase.execute())
             _isFetchingNews.postValue(false)
         }
 
